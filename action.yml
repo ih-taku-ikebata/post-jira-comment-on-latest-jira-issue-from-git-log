@@ -1,0 +1,42 @@
+name: 'Post Jira Comment on Latest Jira Issue From Git Log'
+description: 'Git log 上の直近の Jira の課題にコメント投稿'
+author: 'Taku Ikebata'
+inputs:
+  comment:
+    description: 'Jira に投稿するコメント'
+    required: true
+  github_repository:
+    description: 'Git のレポジトリ'
+    required: true
+    default: ${{ github.repository }}
+  github_sha:
+    description: 'Git のコミットハッシュ'
+    required: true
+    default: ${{ github.sha }}
+  github_token:
+    description: 'Github のアクセストークン'
+    required: true
+    default: ${{ github.token }}
+  jira_server_url:
+    description: 'Jira インスタンスのURL'
+    required: true
+  jira_api_token:
+    description: 'Jira の認証のためのアクセストークン'
+    required: true
+  jira_email:
+    description: 'Jira のアクセストークンが作成されたユーザーのメールアドレス'
+    required: true
+outputs:
+  jira_issue_key:
+    description: 'コメントを投稿した課題キー'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.comment }}
+    - ${{ inputs.jira_server_url }}
+    - ${{ inputs.jira_api_token }}
+    - ${{ inputs.jira_email }}
+    - ${{ inputs.github_repository }}
+    - ${{ inputs.github_sha }}
+    - ${{ inputs.github_token }}
